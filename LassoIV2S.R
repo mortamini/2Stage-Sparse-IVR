@@ -71,7 +71,7 @@ LassoIV2S<-function(X,y,Z,trace=0,intercept=TRUE,criteria="AICc",method="lars"){
 	bethat=coef(model2)
 	if(method=="lars"){
 		b0=predict(model2,data.frame(t(rep(0,p))))$fit
-		bethat=c(b0,bethat)
+		bethat=cbind(b0,bethat)
 	}
 	if(method=="grpreg") bethat=t(bethat)
 	bethat=bethat[-1,]

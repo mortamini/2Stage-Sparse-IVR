@@ -6,7 +6,7 @@ library(lars)
 library(MASS)
 library(hdm)
 library(grpreg)
-source("TSEPIV.R")
+source("EPIV2S.R")
 source("LassoIV2S.R")
 source("SCADIV2S.R")
 source("rlassoIV2.R")
@@ -14,6 +14,7 @@ source("rlassoIV2.R")
 source("eval-model.R")
 source("gen-IV.R")
 source("cv-model.R")
+source("progress.R")
 #
 p=100
 q=200
@@ -22,7 +23,7 @@ beta=c(rep(1,7),rep(0,85),rep(-0.5,8))
 Gam=matrix(c(rep(0.01,500),rep(0,18500),rep(-0.005,1000)),q,p)
 Z=matrix(rbinom(n*q,1,0.5),n,q)
 #
-BB=1000
+BB=10
 #
 ev=list()
 ev[[1]]=ev[[2]]=ev[[3]]=ev[[4]]=matrix(nrow=BB,ncol=6)
@@ -58,13 +59,12 @@ tryCatch({
 	cat(paste("iteration",bb,"2S-EP starts \n"))
 tryCatch({
 	model1 <- EPIV2S(X,y,Z,trace=1,post=FALSE,
-			intercept=TRUE,init=model2)
+			intercept=TRUE,init=list(model=model2,v02=1,w02=1))
 	cat("evaluation ... \n")
 	ev[[1]][bb,1:5] = eval.model(model1)
 	cat("cross-validation ... \n")
-	ev[[1]][bb,6] = cv.model("TSEPIV",post=FALSE,
-			intercept=TRUE,init=LassoIV2S,
-			init.criteria="AICc")
+	ev[[1]][bb,6] = cv.model("EPIV2S",post=FALSE,
+			intercept=TRUE,init=list(model=model2,v02=1,w02=1))
   }, error=function(e){cat("Error in 2S EP:",
 		conditionMessage(e), "\n")})
 
