@@ -7,8 +7,10 @@ SCADIV2S<-function(X,y,Z,trace=0,criteria="AICc",...){
 	p=ncol(X)
 	q=ncol(Z)
 	#---------------------------------------------------
+	if(trace>0) cat("Stage I \n")
 	Gh=matrix(nrow=(q+1),ncol=p)
 	for(j in 1:p){
+		if(trace>1) 	progress(x=j,max=p)
 		model2=grpreg(Z, X[,j], nlambda=q, alpha=1, intercept=FALSE, 
 					group=1:q, penalty="grSCAD", gamma=3.7, family="gaussian",
 					group.multiplier=rep(1,q))
@@ -29,6 +31,7 @@ SCADIV2S<-function(X,y,Z,trace=0,criteria="AICc",...){
 		path = which.min(CRTs)
 		Gh[,j]=gamhat[,path]
 	}
+	if(trace>0) cat("Stage II \n")
 	Xhat=cbind(1,Z)%*%Gh
 	model2=grpreg(Xhat, y, nlambda=p, alpha=1, intercept=FALSE, 
 				group=1:p, penalty="grSCAD", gamma=3.7, family="gaussian",
