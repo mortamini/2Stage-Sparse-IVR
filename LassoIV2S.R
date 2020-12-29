@@ -21,7 +21,7 @@ LassoIV2S<-function(X,y,Z,trace=0,intercept=TRUE,criteria="AICc",method="lars"){
 			model2=lars(Z,X[,j],type = "lasso",intercept =intercept)			
 		}
 		}, error=function(e){
-			stop("An error occured in LARS ! Use method=grpreg instead. \n")
+			stop("An error occured in LARS ! \n  Use method=grpreg instead. \n")
 		})
 		}else if(method =="grpreg"){
 			model2=grpreg(Z, X[,j], nlambda=min(q,100), alpha=1, intercept=FALSE, 
