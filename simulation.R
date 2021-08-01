@@ -23,7 +23,7 @@ Gam=matrix(c(rep(0.01,300),rep(0,118800),rep(-0.005,900)),q,p)
 Z=matrix(rbinom(n*q,1,rbeta(n*q,3,7)),n,q)
 #
 pmat=combn(seq(0.1,0.9,0.2),2)
-BB=20
+BB=1000
 #
 ev=list()
 ev[[1]]=ev[[2]]=ev[[3]]=ev[[4]]=matrix(nrow=BB,ncol=7)
